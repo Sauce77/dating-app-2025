@@ -11,7 +11,7 @@ namespace API.Controllers;
 public class MembersController(AppDbContext context) : ControllerBase
 {
     [HttpGet]
-    public ActionResult<IReadOnlyList<AppUser>> GetMembers()
+    public async Task<ActionResult<IReadOnlyList<AppUser>>> GetMembers()
     {
         var members = context.Users.ToList();
 
@@ -19,9 +19,9 @@ public class MembersController(AppDbContext context) : ControllerBase
     }
 
     [HttpGet("{id}")] // localhost:5201/api/member/bob-id
-    public ActionResult<AppUser> GetMember(string id)
+    public async Task<ActionResult<AppUser>> GetMember(string id)
     {
-        var member = context.Users.Find(id);
+        var member = await context.Users.Find(id);
 
         if (member == null) return NotFound();
 
