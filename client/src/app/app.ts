@@ -14,6 +14,10 @@ export class App implements OnInit{
   protected readonly title = signal('Dating App');
 
   ngOnInit(): void {
-    this.http.get("https://localhost:5201/api/members")
+    this.http.get("http://localhost:5201/api/members").subscribe({
+      next: response => console.log(response),
+      error: error => console.log(error),
+      complete: () => console.log("Ahi esta tu pinche empanada, panzon pendejo")
+    });
   }
 }
