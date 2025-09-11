@@ -7,7 +7,7 @@ namespace API.Controllers;
 
 [Route("api/[controller]")] // https://localhost:5201/api/members
 [ApiController]
-public class MembersController(AppDbContext context) : ControllerBase
+public class MembersController(AppDbContext context) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<AppUser>>> GetMembers()
