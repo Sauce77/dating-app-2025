@@ -11,14 +11,10 @@ import { User } from '../../../types/users';
 })
 export class Register {
   protected creds = {} as RegisterCreds;
-
-  // Esta es la forma correcta de declarar el input requerido
-  public membersFromHome = input.required<User[]>();
   cancelRegister = output<boolean>();
 
   register(): void{
     console.log(this.creds);
-    console.log('Members from home:', this.membersFromHome());
   }
 
   cancel(): void{
