@@ -10,9 +10,11 @@
         </a>
     
         <nav class="flex gap-3 my-2 uppercase text-lg text-white">
-            <a routerLink="/members" routerLinkActive="text-accent">Matches</a>
-            <a routerLink="/list" routerLinkActive="text-accent">List</a>
-            <a routerLink="/messages" routerLinkActive="text-accent">Messages</a>
+            @if(accountService.currentUser()){
+                <a routerLink="/members" routerLinkActive="text-accent">Matches</a>
+                <a routerLink="/list" routerLinkActive="text-accent">List</a>
+                <a routerLink="/messages" routerLinkActive="text-accent">Messages</a>
+            }
         </nav>
 
 
