@@ -1,8 +1,4 @@
-using API.Data;
-using API.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers;
 
@@ -10,23 +6,26 @@ public class ErrorController : BaseApiController
 {
 
     [HttpGet("bad-request")]
-    public IActionResult GetBadRequest()
+    public IActionResult GetBadRequest() // 400
     {
-        return BadRequest("bad-request");
+        var inputParam = -1;
+        if (inputParam <= 0) throw new ArgumentOutOfRangeException(nameof(inputParam));
+        
+        return BadRequest("Bad request");
+    }
+
+    [HttpGet("auth")]
+    public IActionResult GetAuth() // 401
+    {
+        return Unauthorized();
     }
 
     [HttpGet("not-found")]
-    public IActionResult GetNotFound()
+    public IActionResult GetNotFound() // 404
     {
         return NotFound();
     }
 
-    [HttpGet("auth")]
-    public IActionResult GetAuth()
-    {
-        throw new Exception("server-error");
-    }
-    
     [HttpGet("server-error")]
     public IActionResult GetServerError() // 500
     {

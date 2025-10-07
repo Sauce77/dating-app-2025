@@ -16,9 +16,10 @@ export const routes: Routes = [
             {path: "members", component: MemberList, canActivate: [authGuard] },
             {path: "members/{id}", component: MemberDetail },
             {path: "list", component: Lists },
-            {path: "messages", component: Messages }
+            {path: "messages", component: Messages },
+            {path: "errors", component: TestErrors },
         ]
     },
     {path: "**", component: Home },
-    {path: "errors", component: TestErrors },
+    
 ];
