@@ -10,17 +10,26 @@ public class ErrorController : BaseApiController
 {
 
     [HttpGet("bad-request")]
-    public IActionResult GetBadRequest(){
+    public IActionResult GetBadRequest()
+    {
         return BadRequest("bad-request");
     }
 
     [HttpGet("not-found")]
-    public IActionResult GetNotFound(){
+    public IActionResult GetNotFound()
+    {
         return NotFound();
     }
-    
+
     [HttpGet("auth")]
-    public IActionResult GetAuth(){
+    public IActionResult GetAuth()
+    {
         throw new Exception("server-error");
+    }
+    
+    [HttpGet("server-error")]
+    public IActionResult GetServerError() // 500
+    {
+        throw new Exception("Server error");
     }
 }
