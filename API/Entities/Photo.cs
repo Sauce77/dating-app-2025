@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace API.Entities;
@@ -14,6 +15,7 @@ public class Photo
     public string? PublicId { get; set; }
 
     // Navigation properties
+    [JsonIgnore]
     public Member Member { get; set; } = null!;
 
     public string MemberId { get; set; } = null!;

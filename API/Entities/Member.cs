@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace API.Entities;
 
@@ -29,9 +31,11 @@ public class Member
     public required string Country { get; set; }
 
     // navigation properties
+    [JsonIgnore]
     [ForeignKey(nameof(Id))]
     public AppUser User { get; set; } = null!;
 
+    [JsonIgnore]
     public List<Photo> Photos { get; set; } = [];
 
 }
