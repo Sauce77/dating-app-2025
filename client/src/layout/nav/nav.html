@@ -29,7 +29,7 @@
                     <div tabindex="0" role="button" class="btn m-1">
                         <div class="avatar">
                             <div class="w-10 rounded">
-                                <img src="user.png" />
+                                <img [src]="user?.imageUrl || './user.png'" />
                             </div>
                         </div>
                         <span>{{ user?.displayName }}</span>

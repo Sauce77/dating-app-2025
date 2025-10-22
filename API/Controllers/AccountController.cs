@@ -6,7 +6,7 @@ using API.Entities;
 using API.DTOs;
 using API.Interfaces;
 using API.Services;
-using API.Extensions;
+using API.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

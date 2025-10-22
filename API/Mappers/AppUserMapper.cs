@@ -3,10 +3,11 @@ using API.Entities;
 using API.DTOs;
 using API.Services;
 using API.Interfaces;
+using System.Reflection.Metadata;
 
-namespace API.Extensions;
+namespace API.Mappers;
 
-public static class AppUserExtensions
+public static class AppUserMapper
 {
     public static UserResponse ToDto(this AppUser appUser, ITokenService tokenService)
     {
@@ -15,7 +16,8 @@ public static class AppUserExtensions
             Id = appUser.Id,
             DisplayName = appUser.DisplayName,
             Email = appUser.Email,
-            Token = tokenService.CreateToken(appUser)
+            ImageUrl = appUser.ImageUrl,
+            Token = tokenService.CreateToken(appUser),
         };
 
     }
