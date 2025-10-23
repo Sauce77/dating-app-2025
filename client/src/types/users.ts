@@ -16,10 +16,3 @@ export type RegisterCreds = {
     displayName: string;
     password: string,
 }
-
-export interface Photo {
-    id: number,
-    url: string,
-    publicId?: string,
-    memberId: string,
-}
