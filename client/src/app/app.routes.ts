@@ -8,6 +8,8 @@ import { authGuard } from '../core/guard/auth-guard';
 import { TestErrors } from '../features/test-errors/test-errors';
 import { NotFound } from '../shared/errors/not-found/not-found';
 import { ServerError } from '../shared/errors/server-error/server-error';
+import { Profile } from '../features/members/profile/profile'
+import { Photos } from '../features/members/photos/photos'
 
 export const routes: Routes = [
     {path: "", component: Home },
@@ -16,7 +18,14 @@ export const routes: Routes = [
         canActivate: [authGuard],
         children: [
             {path: "members", component: MemberList, canActivate: [authGuard] },
-            {path: "members/:id", component: MemberDetail },
+            {path: "members/:id", component: MemberDetail,
+                children: [
+                    { path: "", redirectTo: "profile", pathMatch: "full" },
+                    { path: "profile", component: Profile, title: "Profile" },
+                    { path: "photos", component: Photos, title: "Photos" },
+                    { path: "messages", component: Messages, title: "Messages" },
+                ]
+             },
             {path: "list", component: Lists },
             {path: "messages", component: Messages },
         ]
