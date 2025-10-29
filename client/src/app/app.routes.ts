@@ -10,6 +10,7 @@ import { NotFound } from '../shared/errors/not-found/not-found';
 import { ServerError } from '../shared/errors/server-error/server-error';
 import { Profile } from '../features/members/profile/profile'
 import { Photos } from '../features/members/photos/photos'
+import { memberResolver } from '../features/members/member-resolver';
 
 export const routes: Routes = [
     {path: "", component: Home },
@@ -19,6 +20,8 @@ export const routes: Routes = [
         children: [
             {path: "members", component: MemberList, canActivate: [authGuard] },
             {path: "members/:id", component: MemberDetail,
+                resolve: { member: memberResolver },
+                runGuardsAndResolvers: "always",
                 children: [
                     { path: "", redirectTo: "profile", pathMatch: "full" },
                     { path: "profile", component: Profile, title: "Profile" },
