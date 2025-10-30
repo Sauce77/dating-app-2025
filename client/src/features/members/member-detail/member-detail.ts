@@ -1,9 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
 import { Member } from '../../../types/member';
 import { filter, Observable } from 'rxjs';
-import { MembersService } from '../../../core/service/members-service';
 
 @Component({
   selector: 'app-member-detail',
@@ -12,7 +10,6 @@ import { MembersService } from '../../../core/service/members-service';
   styleUrl: './member-detail.css'
 })
 export class MemberDetail implements OnInit {
-  private membersService = inject(MembersService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   protected member = signal(<Member | undefined>(undefined))

@@ -26,8 +26,9 @@ public class MembersController(IMembersRepository membersRepository) : BaseApiCo
         return await membersRepository.GetMemberAsync(id) ?? throw new ArgumentNullException();
     }
 
-    [HttpGet("id/photos")]
-    public async Task<ActionResult<IReadOnlyList<PathTooLongException>>> GetPhotos(string id)
+    [AllowAnonymous]
+    [HttpGet("{id}/photos")]
+    public async Task<ActionResult<IReadOnlyList<Photo>>> GetPhotos(string id)
     {
         return Ok(await membersRepository.GetPhotosAsync(id));
     }

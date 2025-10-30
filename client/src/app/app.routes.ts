@@ -8,8 +8,8 @@ import { authGuard } from '../core/guard/auth-guard';
 import { TestErrors } from '../features/test-errors/test-errors';
 import { NotFound } from '../shared/errors/not-found/not-found';
 import { ServerError } from '../shared/errors/server-error/server-error';
-import { Profile } from '../features/members/profile/profile'
-import { Photos } from '../features/members/photos/photos'
+import { MemberProfile } from '../features/member-profile/member-profile';
+import { MemberPhotos } from '../features/member-photos/member-photos';
 import { memberResolver } from '../features/members/member-resolver';
 
 export const routes: Routes = [
@@ -24,8 +24,8 @@ export const routes: Routes = [
                 runGuardsAndResolvers: "always",
                 children: [
                     { path: "", redirectTo: "profile", pathMatch: "full" },
-                    { path: "profile", component: Profile, title: "Profile" },
-                    { path: "photos", component: Photos, title: "Photos" },
+                    { path: "profile", component: MemberProfile, title: "Profile" },
+                    { path: "photos", component: MemberPhotos, title: "Photos" },
                     { path: "messages", component: Messages, title: "Messages" },
                 ]
              },
