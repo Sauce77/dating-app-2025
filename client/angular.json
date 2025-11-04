@@ -25,6 +25,10 @@
         "@schematics/angular:resolver": {
           "skipTests": false,
           "path": "src/features"
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": false,
+          "path": "src/core/pipes"
         }
       },
       "root": "",
