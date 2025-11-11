@@ -1,26 +1,23 @@
-using System.Threading.Tasks;
-using NUnit.Framework;
+using API.Data;
 using Microsoft.EntityFrameworkCore;
 
-using API.Data;
-
-namespace API.UnitTest;
+namespace API.UnitTests;
 
 [SetUpFixture]
 public class GlobalTestSetup
 {
-
     public static AppDbContext AppDbContext { get; private set; }
 
     [OneTimeSetUp]
     public async Task Setup()
     {
         DbContextOptions<AppDbContext> options = new DbContextOptionsBuilder<AppDbContext>()
-        .UseSqlite("Data source=dating.db")
-        .Options;
+            .UseSqlite("Data source=dating.db")
+            .Options;
 
         AppDbContext = new AppDbContext(options);
         await AppDbContext.Database.MigrateAsync();
+        await Seed.SeedUsers(AppDbContext);
     }
 
     [OneTimeTearDown]
@@ -28,5 +25,4 @@ public class GlobalTestSetup
     {
         await AppDbContext.DisposeAsync();
     }
-
 }
