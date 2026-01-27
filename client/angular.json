@@ -21,6 +21,17 @@
         "@schematics/angular:interceptor": {
           "skipTests": false,
           "path": "src/core/interceptors"
+<<<<<<< HEAD
+=======
+        },
+        "@schematics/angular:resolver": {
+          "skipTests": false,
+          "path": "src/features"
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": false,
+          "path": "src/core/pipes"
+>>>>>>> parcial03
         }
       },
       "root": "",
@@ -63,7 +74,13 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
