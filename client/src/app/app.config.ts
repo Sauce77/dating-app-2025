@@ -7,21 +7,14 @@ import { InitService } from '../core/service/init-service';
 import { lastValueFrom } from 'rxjs';
 import { TestErrors } from '../features/test-errors/test-errors';
 import { errorInterceptor } from '../core/interceptors/error-interceptor';
-<<<<<<< HEAD
-=======
 import { jwtInterceptor } from '../core/interceptors/jwt-interceptor';
->>>>>>> parcial03
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes, withViewTransitions()),
-<<<<<<< HEAD
-    provideHttpClient(withInterceptors([errorInterceptor])),
-=======
     provideHttpClient(withInterceptors([errorInterceptor, jwtInterceptor])),
->>>>>>> parcial03
     provideAppInitializer(async() => {
       const initService = inject(InitService);
 

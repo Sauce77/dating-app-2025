@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-member-list',
-  imports: [],
-=======
 import { Component, inject } from '@angular/core';
 import { MembersService } from '../../../core/service/members-service'
 import { Member } from '../../../types/member';
@@ -15,15 +8,12 @@ import { MemberCard } from "../member-card/member-card";
 @Component({
   selector: 'app-member-list',
   imports: [AsyncPipe, MemberCard],
->>>>>>> parcial03
   templateUrl: './member-list.html',
   styleUrl: './member-list.css'
 })
-export class MemberList {
-<<<<<<< HEAD
 
-}
-=======
+export class MemberList {
+
   private membersService = inject(MembersService);
   protected members$: Observable<Member[]>;
 
@@ -31,4 +21,3 @@ export class MemberList {
     this.members$ = this.membersService.getMembers();
   }
 }
->>>>>>> parcial03

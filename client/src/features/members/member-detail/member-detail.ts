@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-member-detail',
-  imports: [],
-  templateUrl: './member-detail.html',
-  styleUrl: './member-detail.css'
-})
-export class MemberDetail {
-
-}
-=======
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Member } from '../../../types/member';
@@ -47,4 +34,3 @@ export class MemberDetail implements OnInit {
   }
 
 }
->>>>>>> parcial03
