@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../core/service/account-service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastService } from '../../core/service/toast-service';
-
 import { themes } from '../themes';
 
 @Component({
@@ -12,13 +11,11 @@ import { themes } from '../themes';
   templateUrl: './nav.html',
   styleUrl: './nav.css'
 })
-
-export class Nav implements OnInit{
-  protected creds: any = {};
+export class Nav implements OnInit {
+  private router = inject(Router);
+  private toast = inject(ToastService);
   protected accountService = inject(AccountService);
-  private router = inject(Router)
-  private toast = inject(ToastService)
-
+  protected creds: any = {};
   protected selectedTheme = signal<string>(localStorage.getItem("theme") || "light");
   protected themes = themes;
 
@@ -26,32 +23,31 @@ export class Nav implements OnInit{
     document.documentElement.setAttribute("data-theme", this.selectedTheme());
   }
 
-  handleSelectedTheme(theme: string){
+  handleSelectedTheme(theme: string) {
     this.selectedTheme.set(theme);
     localStorage.setItem("theme", theme);
     document.documentElement.setAttribute("data-theme", theme);
     const elem = document.activeElement as HTMLDivElement;
-    if (elem){
+    if (elem) {
       elem.blur();
     }
   }
 
-  login(): void{
-   this.accountService.login(this.creds).subscribe({
-    next: response => {
-      this.router.navigateByUrl("/members")
-      this.creds = {};
-      this.toast.success("Logged In", 2000)
-    },
-    error: error => {
-      this.toast.error(error.error, 5000)
-    }
-   })
+  login(): void {
+    this.accountService.login(this.creds).subscribe({
+      next: response => {
+        this.router.navigateByUrl("/members");
+        this.creds = {};
+        this.toast.success("Logged in!")
+      },
+      error: error => {
+        this.toast.error(error.error);
+      }
+    });
   }
 
-  logout(): void{
+  logout(): void {
     this.accountService.logout();
-    this.router.navigateByUrl("")
-    this.toast.info("Au revoir, putain!")
+    this.router.navigateByUrl("/");
   }
 }

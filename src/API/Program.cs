@@ -78,14 +78,16 @@ public static class Program
 
         // Configure the HTTP request pipeline.
         app.UseMiddleware<ExceptionMiddleware>();
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseCors(x => x.AllowAnyHeader()
+
+        app.UseCors(x => x.AllowAnyHeader()
             .AllowAnyMethod()
             .WithOrigins(
                 "http://localhost:4200",
                 "https://localhost:4200"
             ));
+        
+        if (app.Environment.IsDevelopment())
+        {
 
             app.UseDeveloperExceptionPage();
             app.UseOpenApi();
