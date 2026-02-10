@@ -1,3 +1,6 @@
+using System.Security.Claims;
+using API.Data;
+using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using API.Mappers;
@@ -29,5 +32,35 @@ public class MembersController(IMembersRepository membersRepository) : BaseApiCo
     public async Task<ActionResult<IReadOnlyList<Photo>>> GetPhotos(string id)
     {
         return Ok(await membersRepository.GetPhotosAsync(id));
+    }
+
+    [HttpPut]
+    public async Task<ActionResult> UpdateMember(MemberUpdateRequest request)
+    {
+        var memberId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if(memberId == null)
+        {
+            return BadRequest("Aucun ID trouve pour ce token.");
+        }
+
+        var member = await membersRepository.GetMemberAsync(memberId);
+
+        if(member == null)
+        {
+            return BadRequest("Aucun utilisateur trouve.");
+        }
+
+
+        member.DisplayName = request.DisplayName ?? member.DisplayName;
+        member.Description = request.Description ?? member.Description;
+        member.City = request.City?? member.City;
+        member.Country = request.Country?? member.Country;
+
+        membersRepository.Update(member);
+
+        if(await membersRepository.SaveAllAsync()){ return NoContent(); }
+
+        return BadRequest("Il y a un probleme pour sauvegarder les changements.");
     }
 }
