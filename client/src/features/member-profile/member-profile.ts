@@ -1,5 +1,5 @@
-import { Component, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, HostListener, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { EditableMember, Member } from '../../types/member';
 import { DatePipe } from '@angular/common';
 import { MembersService } from '../../core/service/members-service';
@@ -12,8 +12,13 @@ import { ToastService } from '../../core/service/toast-service';
   templateUrl: './member-profile.html',
   styleUrl: './member-profile.css'
 })
-export class MemberProfile implements OnInit, OnDestroy{
-  @ViewChild('editForm') editForm?: NgForm;
+export class MemberProfile implements OnInit, OnDestroy {
+  @ViewChild('memberProfileEditForm') memberProfileEditForm?: NgForm;
+  @HostListener('window:beforeunload', ['$event']) notify ($event:BeforeUnloadEvent) {
+    if (this.memberProfileEditForm?.dirty) {
+      $event.preventDefault();
+    }
+  };
   private route = inject(ActivatedRoute);
   private toast = inject(ToastService);
   protected member = signal<Member | undefined>(undefined);
@@ -34,27 +39,25 @@ export class MemberProfile implements OnInit, OnDestroy{
       displayName: this.member()?.displayName || '',
       description: this.member()?.description || '',
       city: this.member()?.city || '',
-      country: this.member()?.country|| ''
+      country: this.member()?.country || ''
     };
   }
 
   ngOnDestroy(): void {
-    if(this.membersService.editMode()){
+    if (this.membersService.editMode()) {
       this.membersService.editMode.set(false);
     }
   }
 
-  updateProfile(){
-    if(!this.member()){ return; }
-    
-    const updatedMember = {...this.member, ...this.editableMember};
+  updateProfile() {
+    if (!this.member()) return;
+    const updatedMember = {...this.member(), ...this.editableMember};
 
-    console.group('UPDATE');
+    console.group("UPDATE");
     console.log(updatedMember);
     console.groupEnd();
 
-
-    this.toast.success('Profile modifie!');
+    this.toast.success('Profile updated successfully');
     this.membersService.editMode.set(false);
   }
 }
