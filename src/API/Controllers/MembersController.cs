@@ -103,4 +103,23 @@ public class MembersController(IMembersRepository membersRepository, IPhotoServi
 
         return BadRequest("Une chose a ete mauvaise");
     }
+
+    [HttpPut("photo/{photoId}")]
+    public async Task<ActionResult> SetMainPhoto(int photoId)
+    {
+        var member = await membersRepository.GetMemberForUpdateAsync(User.GetMemberId());
+
+        if (member == null) return BadRequest("Token ne pas trouve sur member");
+
+        var photo = member.Photos.SingleOrDefault(p => p.Id == photoId);
+
+        if (member.ImageUrl == photo?.Url || photo == null) return BadRequest("Ce n'a pas pu mettre la photo comme profile.");
+
+        member.ImageUrl = photo?.Url;
+        member.User.ImageUrl = photo?.Url;
+
+        if(await membersRepository.SaveAllAsync()) return NoContent();
+
+        return BadRequest("Quelque merde a passe en mettant de la photo du profile");
+    }
 }
