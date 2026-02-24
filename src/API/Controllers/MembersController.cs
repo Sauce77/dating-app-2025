@@ -122,4 +122,37 @@ public class MembersController(IMembersRepository membersRepository, IPhotoServi
 
         return BadRequest("Quelque merde a passe en mettant de la photo du profile");
     }
+
+    [HttpDelete("photo/{photoId}")]
+    public async Task<ActionResult> DeletePhoto(int photoId)
+    {
+        var member = await membersRepository.GetMemberForUpdateAsync(User.GetMemberId());
+
+        if (member == null) return BadRequest("Token ne pas trouve sur member");
+
+        var photo = member.Photos.SingleOrDefault(p => p.Id == photoId);
+
+        if (photo == null || photo.Url == member.ImageUrl)
+        {
+            return BadRequest("On ne peux pas effacer ce photo ou c'est votre photu du profile.");
+        }
+
+        if (photo.PublicId != null)
+        {
+            var result = await photoService.DeletePhotoAsync(photo.PublicId);
+            if (result.Error != null)
+            {
+                return BadRequest(result.Error.Message);
+            }
+        }
+
+        member.Photos.Remove(photo);
+
+        if (await membersRepository.SaveAllAsync())
+        {
+            return Ok();
+        }
+
+        return BadRequest("Il y a eu qq probleme pendant l'effacement du photo");
+    }
 }
