@@ -1,20 +1,22 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MembersService } from '../../core/service/members-service';
 import { ActivatedRoute } from '@angular/router';
-import { Photo } from '../../types/member';
-import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
-import { ImageUpload } from '../../shared/image-upload/image-upload';
+import { Member, Photo } from '../../types/member';
+import { ImageUpload } from "../../shared/image-upload/image-upload";
+import { AccountService } from '../../core/service/account-service';
+import { User } from '../../types/users';
+import { IconButton } from "../../shared/icon-button/icon-button";
 
 @Component({
   selector: 'app-member-photos',
-  imports: [AsyncPipe, ImageUpload],
+  imports: [ImageUpload, IconButton],
   templateUrl: './member-photos.html',
   styleUrl: './member-photos.css'
 })
-export class MemberPhotos implements OnInit{
-  protected membersService = inject(MembersService);
+export class MemberPhotos implements OnInit {
   private route = inject(ActivatedRoute);
+  private accountService = inject(AccountService);
+  protected membersService = inject(MembersService);
   protected photos = signal<Photo[]>([]);
   protected loading = signal(false);
 
@@ -28,12 +30,12 @@ export class MemberPhotos implements OnInit{
   }
 
   get photoMocks() {
-    return Array.from({ length: 0 }, (_, i) => ({
-      url: "./user.png"
+    return Array.from({ length: 10 }, (_, i) => ({
+      url: "./user.jpg"
     }));
   }
 
-  onUploadImage(file: File){
+  onUploadImage(file: File) {
     this.loading.set(true);
     this.membersService.uploadPhoto(file).subscribe({
       next: photo => {
@@ -42,9 +44,23 @@ export class MemberPhotos implements OnInit{
         this.photos.update(photos => [...photos, photo]);
       },
       error: error => {
-        console.log("Erreur pendant le chargement de l'image");
+        console.log('Error while uploading the image: ', error);
         this.loading.set(false);
       }
     })
+  }
+
+  setMainPhoto(photo: Photo) {
+    this.membersService.setMainPhoto(photo).subscribe({
+      next: () => {
+        const currentUser = this.accountService.currentUser();
+        if (currentUser) currentUser.imageUrl = photo.url;
+        this.accountService.setCurrentUser(currentUser as User);
+        this.membersService.member.update(member => ({
+          ...member,
+          imageUrl: photo.url
+        }) as Member);
+      }
+    });
   }
 }
