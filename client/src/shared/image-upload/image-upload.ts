@@ -10,7 +10,7 @@ export class ImageUpload {
   private fileToUpload: File | null = null;
   protected imageSource = signal<string | ArrayBuffer | null | undefined>(null);
   protected isDragging = false;
-  
+
   uploadFile = output<File>();
   loading = input<boolean>(false);
 
@@ -26,30 +26,30 @@ export class ImageUpload {
     this.isDragging = false;
   }
 
-  onDrop(event: DragEvent){
+  onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
     this.isDragging = false;
 
-    if(event.dataTransfer?.files.length) {
+    if (event.dataTransfer?.files.length) {
       const file = event.dataTransfer.files[0];
       this.previewImage(file);
       this.fileToUpload = file;
     }
   }
 
-  onCancel(){
+  onCancel() {
     this.fileToUpload = null;
     this.imageSource.set(null);
   }
 
-  onUploadFile(){
-    if(this.fileToUpload){
+  onUploadFile() {
+    if (this.fileToUpload) {
       this.uploadFile.emit(this.fileToUpload);
     }
   }
 
-  private previewImage(file: File){
+  private previewImage(file: File) {
     const reader = new FileReader();
     reader.onload = (e) => this.imageSource.set(e.target?.result);
     reader.readAsDataURL(file);

@@ -109,18 +109,27 @@ public class MembersController(IMembersRepository membersRepository, IPhotoServi
     {
         var member = await membersRepository.GetMemberForUpdateAsync(User.GetMemberId());
 
-        if (member == null) return BadRequest("Token ne pas trouve sur member");
+        if (member == null)
+        {
+            return BadRequest("Token not available in member");
+        }
 
         var photo = member.Photos.SingleOrDefault(p => p.Id == photoId);
 
-        if (member.ImageUrl == photo?.Url || photo == null) return BadRequest("Ce n'a pas pu mettre la photo comme profile.");
+        if (member.ImageUrl == photo?.Url || photo == null)
+        {
+            return BadRequest("Cannot set photo as main");
+        }
 
-        member.ImageUrl = photo?.Url;
-        member.User.ImageUrl = photo?.Url;
+        member.ImageUrl = photo.Url;
+        member.User.ImageUrl = photo.Url;
 
-        if(await membersRepository.SaveAllAsync()) return NoContent();
+        if (await membersRepository.SaveAllAsync())
+        {
+            return NoContent();
+        }
 
-        return BadRequest("Quelque merde a passe en mettant de la photo du profile");
+        return BadRequest("Some error happened while setting main photo");
     }
 
     [HttpDelete("photo/{photoId}")]
@@ -128,13 +137,16 @@ public class MembersController(IMembersRepository membersRepository, IPhotoServi
     {
         var member = await membersRepository.GetMemberForUpdateAsync(User.GetMemberId());
 
-        if (member == null) return BadRequest("Token ne pas trouve sur member");
+        if (member == null)
+        {
+            return BadRequest("Token not available in member");
+        }
 
         var photo = member.Photos.SingleOrDefault(p => p.Id == photoId);
 
         if (photo == null || photo.Url == member.ImageUrl)
         {
-            return BadRequest("On ne peux pas effacer ce photo ou c'est votre photu du profile.");
+            return BadRequest("This photo is not deletable or it is your main photo");
         }
 
         if (photo.PublicId != null)
@@ -153,6 +165,6 @@ public class MembersController(IMembersRepository membersRepository, IPhotoServi
             return Ok();
         }
 
-        return BadRequest("Il y a eu qq probleme pendant l'effacement du photo");
+        return BadRequest("There was a problem while deleting your photo");
     }
 }
