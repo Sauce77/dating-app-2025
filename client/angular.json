@@ -16,13 +16,11 @@
         },
         "@schematics/angular:guard": {
           "skipTests": false,
-          "path": "src/core/guard"
+          "path": "src/core/guards"
         },
         "@schematics/angular:interceptor": {
           "skipTests": false,
           "path": "src/core/interceptors"
-<<<<<<< HEAD
-=======
         },
         "@schematics/angular:resolver": {
           "skipTests": false,
@@ -31,7 +29,6 @@
         "@schematics/angular:pipe": {
           "skipTests": false,
           "path": "src/core/pipes"
->>>>>>> parcial03
         }
       },
       "root": "",

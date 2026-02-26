@@ -1,9 +1,5 @@
 import { Component, input, Input, output, inject} from '@angular/core';
-<<<<<<< HEAD
-import { RegisterCreds } from '../../../types/registerCreds';
-=======
 import { RegisterCreds } from '../../../types/users';
->>>>>>> parcial03
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../../core/service/account-service';
 
