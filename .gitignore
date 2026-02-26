@@ -420,3 +420,4 @@ FodyWeavers.xsd
 
 # Sqlite database
 *.db*
+src/API/appsettings.json
