@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, output } from '@angular/core';
 import { RegisterCreds } from '../../../types/users';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AccountService } from '../../../core/service/account-service';
 import { JsonPipe } from '@angular/common';
+import { ValidatorFn } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -38,9 +39,21 @@ export class Register implements OnInit {
         ]
       ),
       confirmPassword: new FormControl('',
-        [Validators.required]
+        [Validators.required, this.matchValues('password')]
       )
+    });
+    this.registerForm.controls['password'].valueChanges.subscribe(() => {
+      this.registerForm.controls['confirmPassword'].updateValueAndValidity();
     })
+  }
+
+  matchValues(matchTo: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const parent = control.parent;
+      if (!parent) return null;
+      const matchValue = parent.get(matchTo)?.value;
+      return control.value === matchValue ? null : { passwordMissmatch: true };
+    }
   }
 
   register(): void {
