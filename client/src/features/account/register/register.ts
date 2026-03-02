@@ -1,13 +1,13 @@
 import { Component, inject, OnInit, output } from '@angular/core';
-import { RegisterCreds } from '../../../types/users';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../../../core/service/account-service';
+import { RegisterCreds } from '../../../types/users';
 import { JsonPipe } from '@angular/common';
-import { ValidatorFn } from '@angular/forms';
+import { TextInput } from '../../../shared/input-text/input-text';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [ReactiveFormsModule, JsonPipe, TextInput],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
@@ -18,33 +18,26 @@ export class Register implements OnInit {
   cancelRegister = output<boolean>();
 
   private readonly EMAIL_REGEX = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-  
+
   ngOnInit(): void {
     this.initializeForm();
   }
 
   initializeForm() {
     this.registerForm = new FormGroup({
-      email: new FormControl('name@email.com', 
-        [Validators.required, Validators.pattern(this.EMAIL_REGEX)]
-      ),
-      displayName: new FormControl('', 
-        [Validators.required]
-      ),
-      password: new FormControl('', 
-        [
-          Validators.required, 
-          Validators.minLength(4), 
-          Validators.maxLength(10)
-        ]
-      ),
+      email: new FormControl('',
+        [Validators.required, Validators.pattern(this.EMAIL_REGEX)]),
+      displayName: new FormControl('',
+        [Validators.required]),
+      password: new FormControl('',
+        [Validators.required, Validators.minLength(4), Validators.maxLength(8)]),
       confirmPassword: new FormControl('',
-        [Validators.required, this.matchValues('password')]
-      )
+        [Validators.required, this.matchValues('password')])
     });
+
     this.registerForm.controls['password'].valueChanges.subscribe(() => {
       this.registerForm.controls['confirmPassword'].updateValueAndValidity();
-    })
+    });
   }
 
   matchValues(matchTo: string): ValidatorFn {
@@ -52,7 +45,7 @@ export class Register implements OnInit {
       const parent = control.parent;
       if (!parent) return null;
       const matchValue = parent.get(matchTo)?.value;
-      return control.value === matchValue ? null : { passwordMissmatch: true };
+      return control.value === matchValue ? null : { passwordMismatch: true };
     }
   }
 
@@ -60,15 +53,15 @@ export class Register implements OnInit {
     console.group("REGISTER");
     console.log(this.registerForm.value);
     console.groupEnd();
-    //this.accountService.register(this.creds).subscribe({
-    //  next: response => {
-    //    console.log(response);
-    //    this.cancel();
-    //  },
-    //  error: error => console.log(error)
-    //});
+    // this.accountService.register(this.creds).subscribe({
+    //   next: response => {
+    //     console.log(response);
+    //     this.cancel();
+    //   },
+    //   error: error => console.log(error)
+    // });
   }
-  
+
   cancel(): void {
     this.cancelRegister.emit(false);
   }
