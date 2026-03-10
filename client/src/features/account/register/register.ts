@@ -4,20 +4,23 @@ import { AccountService } from '../../../core/service/account-service';
 import { RegisterCreds } from '../../../types/users';
 import { JsonPipe } from '@angular/common';
 import { TextInput } from '../../../shared/input-text/input-text';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, JsonPipe, TextInput],
+  imports: [ReactiveFormsModule,TextInput],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
 export class Register {
   private accountService = inject(AccountService);
   private fb = inject(FormBuilder)
+  private router = inject(Router)
   protected creds = {} as RegisterCreds;
   protected credentialsForm: FormGroup;
   protected profileForm: FormGroup;
   protected currentStep = signal(1);
+  protected validationErrors = signal<string[]>([]);
   cancelRegister = output<boolean>();
 
   private readonly EMAIL_REGEX = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
@@ -68,24 +71,24 @@ export class Register {
   }
 
   register(): void {
-    console.group("REGISTER");
-    console.log(this.credentialsForm.value);
-    console.log(this.currentStep());
+
     
 
     if(this.credentialsForm.valid && this.profileForm.valid) {
       const formData = { ...this.credentialsForm.value, ...this.profileForm.value };
-      console.log(formData);
-    }
+    
 
-    console.groupEnd();
-    // this.accountService.register(this.creds).subscribe({
-    //   next: response => {
-    //     console.log(response);
-    //     this.cancel();
-    //   },
-    //   error: error => console.log(error)
-    // });
+      console.groupEnd();
+      this.accountService.register(formData).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/members');
+        },
+        error: error => {
+          this.validationErrors.set(error);
+          console.log(error);
+        }
+      });
+    }
   }
 
   cancel(): void {

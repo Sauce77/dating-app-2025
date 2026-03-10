@@ -52,6 +52,7 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
                 Gender = request.Gender,
                 City = request.City,
                 Country = request.Country,
+                BirthDay = request.BirthDay
             }
         };
         context.Users.Add(user);
