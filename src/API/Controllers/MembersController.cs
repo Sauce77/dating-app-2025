@@ -2,6 +2,7 @@ using System.Security.Claims;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using API.Mappers;
 using API.Services;
@@ -14,9 +15,9 @@ namespace API.Controllers;
 public class MembersController(IMembersRepository membersRepository, IPhotoService photoService) : BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
+    public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers([FromQuery] PaginationRequest paginationRequest)
     {
-        return Ok(await membersRepository.GetMembersAsync());
+        return Ok(await membersRepository.GetMembersAsync(paginationRequest));
     }
 
     [HttpGet("{id}")] // https://localhost:5001/api/members/bob-id
