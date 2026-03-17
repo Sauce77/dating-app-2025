@@ -4,7 +4,7 @@ import { Member } from '../../../types/member';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { MemberCard } from "../member-card/member-card";
-import { PaginationResult } from '../../../types/pagination';
+import { PaginationResult } from '../../../types/paginationMetadata';
 
 @Component({
   selector: 'app-member-list',
