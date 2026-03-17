@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { EditableMember, Member, Photo } from '../../types/member';
 import { Observable, tap } from 'rxjs';
+import { PaginationResult } from '../../types/pagination';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +22,12 @@ export class MembersService {
     );
   }
 
-  getMembers(): Observable<Member[]> {
-    return this.http.get<Member[]>(this.baseUrl + "members");
+  getMembers(pageNumber = 1, pageSize = 5): Observable<PaginationResult<Member>> {
+    let params = new HttpParams();
+    params = params.append('pageNumber', pageNumber);
+    params = params.append('pageSize', pageSize);
+
+    return this.http.get<PaginationResult<Member>>(this.baseUrl + "members", { params });
   }
 
   getPhotos(id: string) {
@@ -43,7 +48,7 @@ export class MembersService {
     return this.http.put(this.baseUrl + 'members/photo/' + photo.id, {});
   }
 
-  deletePhoto(deleteId: number) {
-    return this.http.delete(this.baseUrl + 'members/photo/' + deleteId);
+  deletePhoto(photoId: number) {
+    return this.http.delete(this.baseUrl + 'members/photo/' + photoId);
   }
 }
