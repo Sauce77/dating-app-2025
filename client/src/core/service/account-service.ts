@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { LoginCreds, RegisterCreds, User } from '../../types/users'
+import { LoginCreds, RegisterCreds, User } from '../../types/users';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -39,6 +39,7 @@ export class AccountService {
 
   logout() {
     localStorage.removeItem("user");
+    localStorage.removeItem("filters");
     this.currentUser.set(null);
   }
 }
