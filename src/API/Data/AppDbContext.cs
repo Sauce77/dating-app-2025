@@ -10,6 +10,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     public DbSet<Member> Members { get; set; }
     public DbSet<Photo> Photos { get; set; }
     public DbSet<MemberLike> Likes { get; set; }
+    public DbSet<Message> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -20,15 +21,21 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<MemberLike>()
             .HasOne(s => s.SourceMember)
+            .WithMany(t => t.LikedMembers)
+            .HasForeignKey(s => s.SourceMemberId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<MemberLike>()
+            .HasOne(s => s.TargetMember)
             .WithMany(t => t.LikedByMembers)
             .HasForeignKey(s => s.TargetMemberId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Message>()
             .HasOne(m => m.Recipient)
             .WithMany(mr => mr.MessagesReceived)
             .OnDelete(DeleteBehavior.Restrict);
-
+        
         modelBuilder.Entity<Message>()
             .HasOne(m => m.Sender)
             .WithMany(mr => mr.MessagesSent)
@@ -37,7 +44,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         modelBuilder.Entity<Message>()
             .Property(m => m.RecipientDeleted)
             .HasDefaultValue(false);
-
+        
         modelBuilder.Entity<Message>()
             .Property(m => m.SenderDeleted)
             .HasDefaultValue(false);
