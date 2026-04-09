@@ -79,16 +79,14 @@ public static class Program
 
         // Configure the HTTP request pipeline.
         app.UseMiddleware<ExceptionMiddleware>();
-
-        app.UseCors(x => x.AllowAnyHeader()
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseCors(x => x.AllowAnyHeader()
             .AllowAnyMethod()
             .WithOrigins(
                 "http://localhost:4200",
                 "https://localhost:4200"
             ));
-        
-        if (app.Environment.IsDevelopment())
-        {
 
             app.UseDeveloperExceptionPage();
             app.UseOpenApi();
@@ -137,6 +135,7 @@ public static class Program
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IMembersRepository, MembersRepository>();
         builder.Services.AddScoped<IPhotoService, PhotoService>();
+        builder.Services.AddScoped<ILikesRepository, LikesRepository>();
         builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
     }
 }
