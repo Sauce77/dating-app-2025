@@ -41,7 +41,7 @@ public class MessagesController(
     }
 
     [HttpGet]
-    public async Task<ActionResult<PaginationResult<MessageResponse>>> GetMessageByContainer(
+    public async Task<ActionResult<PaginationResult<MessageResponse>>> GetMessagesByContainer(
         [FromQuery] MessageParams messageParams)
     {
         messageParams.MemberId = User.GetMemberId();
@@ -54,5 +54,4 @@ public class MessagesController(
     {
         return Ok(await messagesRepository.GetThread(User.GetMemberId(), recipientId));
     }
-
 }
