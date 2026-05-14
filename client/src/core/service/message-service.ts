@@ -11,15 +11,25 @@ export class MessageService {
   private baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
-  getMessageContainer(container: string, pageNumber: number, pageSize: number)
-  {
+  getMessages(container: string, pageNumber: number, pageSize: number) {
     let params = new HttpParams();
 
     params = params.append('pageNumber', pageNumber);
     params = params.append('pageSize', pageSize);
     params = params.append('container', container);
 
-    return this.http.get<PaginationResult<Message>>(this.baseUrl + 'messages', {params})
+    return this.http.get<PaginationResult<Message>>(this.baseUrl + 'messages', { params });
   }
 
+  getMessageThread(memberId: string) {
+    return this.http.get<Message[]>(this.baseUrl + 'messages/thread/' + memberId);
+  }
+
+  sendMessage(recipientId: string, content: string) {
+    return this.http.post<Message>(this.baseUrl + 'messages', { recipientId, content });
+  }
+
+  deleteMessage(id: string) {
+    return this.http.delete(this.baseUrl + 'messages/' + id);
+  }
 }
