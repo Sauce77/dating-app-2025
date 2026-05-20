@@ -54,7 +54,7 @@
       </div>
     </form>
   } @else {
-    <div>{{member.description}}</div>
+    <div>{{member.description || "Ce utilisateur n'a pas ecrit une description"}}</div>
   }
 </div>
 }
