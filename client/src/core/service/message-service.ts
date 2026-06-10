@@ -9,7 +9,7 @@ import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@micros
 @Injectable({
   providedIn: 'root'
 })
-export class MessageService {
+export class MessagesService {
   private baseUrl = environment.apiUrl;
   private hubUrl = environment.hubUrl;
   private http = inject(HttpClient);
